@@ -21,6 +21,7 @@ export default function Tier4Page() {
   const [loading, setLoading] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
+  const [ownerAdd, setOwnerAdd] = useState<string>("")
 
   const { connectWallet } = useConnectWallet();
 
@@ -53,8 +54,8 @@ export default function Tier4Page() {
 
       const balance = await contractRead.balanceOf(address)
 
-      setWalletAddress(formatEther(address));
-      setBalance(balance);
+      setWalletAddress(address);
+      setBalance(formatEther(balance));
 
       setIsWalletConnected(true);
     } catch (error) {
@@ -120,6 +121,10 @@ export default function Tier4Page() {
 
       const newBalance = await contractRead.balanceOf(address);
       console.log('New balance:', newBalance.toString());
+
+      const ownerAddress = await contract.owner()
+      setOwnerAdd(ownerAddress)
+
 
       setError('');
     } catch (error) {
@@ -229,6 +234,8 @@ export default function Tier4Page() {
 
       const newBalance = await contractRead.balanceOf(address);
       console.log('New token balance:', formatEther(newBalance));
+      setBalance(formatEther(newBalance));
+      alert(`Success tranfer token to: ${recipientAddress}`)
 
       setError('');
     } catch (error) {
@@ -278,6 +285,11 @@ export default function Tier4Page() {
         <div className="flex gap-1 items-center text-sm text-gray-600 font-mono">
           <h1>Balance</h1>
           <span>{balance} ETH</span>
+        </div>
+
+        <div className="flex gap-1 items-center text-sm text-gray-600 font-mono">
+          <h1>Owner Address</h1>
+          <span>{ownerAdd}</span>
         </div>
 
         <div className="flex gap-2 items-center">
