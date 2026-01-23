@@ -32,6 +32,11 @@ export default defineConfig({
       type: "edr-simulated",
       chainType: "op",
     },
+    localhost: {
+      type: "http",
+      chainType: "l1",
+      url: process.env.LOCALHOST_RPC_URL || "http://localhost:8545",
+    },
     sepolia: {
       type: "http",
       chainType: "l1",

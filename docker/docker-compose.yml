@@ -42,17 +42,31 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
 
-  hardhat:
+
+  hardhat-node:
     build:
       context: ../contracts
       dockerfile: Dockerfile
-    container_name: contracts
+    container_name: contracts_node
     ports:
       - "8545:8545"
-    restart: "always"
     volumes:
       - ../contracts:/app
       - /app/node_modules
+    command: npx hardhat node --hostname 0.0.0.0
+
+  hardhat-deploy:
+    build:
+      context: ../contracts
+      dockerfile: Dockerfile
+    container_name: contracts_deploy
+    depends_on:
+      - hardhat-node
+    volumes:
+      - ../contracts:/app
+      - /app/node_modules
+    environment:
+      - LOCALHOST_RPC_URL=http://hardhat-node:8545
     command: npx hardhat ignition deploy ignition/modules/Token.ts --network localhost
 
 volumes:
