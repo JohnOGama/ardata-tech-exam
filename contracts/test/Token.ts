@@ -29,7 +29,7 @@ describe("Token Deployment", function () {
 
     await expect(
       token.connect(addr1).mint(addr1.address, 10n),
-    ).to.be.revertedWith("Ownable: caller is not the owner");
+    ).to.be.revertedWithCustomError(token, "OwnableUnauthorizedAccount");
 
     const addr1Balance = await token.balanceOf(addr1.address);
     expect(addr1Balance).to.equal(0n);
